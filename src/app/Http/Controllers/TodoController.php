@@ -8,17 +8,16 @@ use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
+    private $todo;
+
+    public function __construct(Todo $todo)
+    {
+      $this->todo = $todo;
+    }
+
     public function index()
     {
-        $todo = new Todo();
-        // dd($todo);
-        // App\Todo
-        
-        $todos = $todo->all();
-        // dd($todo);→App\Todo {#233 ▶}
-        // dd($todos);→これもインスタンスを返している
-
-
+      $todos = $this->todo->all();
         return view('todo.index', ['todos' => $todos]);
     }
 //Collectionクラスの利点・・・直感的な操作で意図が明確、Controller側のコードを加工するだけで表示するデータを柔軟に加工できる、メソッドチェーンで拡張しやすい
@@ -41,25 +40,15 @@ class TodoController extends Controller
       //            "content" => "aa"
       //         ]
       // フォームから送られてきたデータを全て配列として取得
-      $todo = new Todo();
-      // dd($todo);
-      // App\Todo {#232 ▶}
-      $todo->content = $inputs['content'];
-      // dd($inputs['content']);
-      // "aa"
-      $todo->fill($inputs);//→マスアサインメント対策、指定されたカラムだけを挿入(ホワイトリスト方式)
-      // dd($inputs);→array:2 [▶]
-      $todo->save();//SQL文を実行、Eloquentクラスによってパラメータのバインドが自動で行われる
-
+      $this->todo->fill($inputs);
+      $this->todo->save();
 
       return redirect()->route('test.index');
     }
 
     public function show($id)
     {
-      $model = new Todo();
-      $todo = $model->find($id);
-
+      $todo = $this->todo->find($id);
       return view('todo.show', ['todo' => $todo]);
     }
 
