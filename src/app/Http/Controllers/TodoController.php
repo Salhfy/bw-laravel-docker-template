@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TodoRequest;
 use App\Todo;
 
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
@@ -29,7 +30,7 @@ class TodoController extends Controller
       return view('todo.create', ['todos' => 'TODO:']); 
     }
 
-    public function store(Request $request)
+    public function store(TodoRequest $request)
     {
 
       $inputs = $request->all();
@@ -59,7 +60,7 @@ class TodoController extends Controller
       return view('todo.edit', ['todo' => $todo]);
     }
 
-    public function update(Request $request, $id)
+    public function update(TodoRequest $request, $id)
     {
       $inputs = $request->all();
       $todo = $this->todo->find($id);
@@ -68,4 +69,12 @@ class TodoController extends Controller
       return redirect()->route('todo.show', $todo->id);
     }
 
+    public function messages()
+    {
+      return [
+        'content.required' => 'ToDoが入力されていません。',
+        'content.max' => 'ToDoは :max 文字以内で入力してください。',
+        ];
+
+    }
 }
