@@ -44,7 +44,7 @@ class TodoController extends Controller
       $this->todo->fill($inputs);
       $this->todo->save();
 
-      return redirect()->route('test.index');
+      return redirect()->route('todo.index');
     }
 
     public function show($id)
@@ -76,5 +76,14 @@ class TodoController extends Controller
         'content.max' => 'ToDoは :max 文字以内で入力してください。',
         ];
 
+    }
+
+    public function delete($id)
+    {
+      $todo = $this->todo->find($id);
+      $todo->delete();
+
+      return redirect()->route('todo.index');
+      
     }
 }
